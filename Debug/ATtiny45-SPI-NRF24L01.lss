@@ -1,0 +1,506 @@
+
+ATtiny45-SPI-NRF24L01.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000002c8  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  0000031c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  0000031c  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000034c  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000120  00000000  00000000  00000388  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000fb2  00000000  00000000  000004a8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000076b  00000000  00000000  0000145a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000822  00000000  00000000  00001bc5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000002d8  00000000  00000000  000023e8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000006cd  00000000  00000000  000026c0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000751  00000000  00000000  00002d8d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 000000f0  00000000  00000000  000034de  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0e c0       	rjmp	.+28     	; 0x1e <__ctors_end>
+   2:	28 c0       	rjmp	.+80     	; 0x54 <__bad_interrupt>
+   4:	27 c0       	rjmp	.+78     	; 0x54 <__bad_interrupt>
+   6:	26 c0       	rjmp	.+76     	; 0x54 <__bad_interrupt>
+   8:	25 c0       	rjmp	.+74     	; 0x54 <__bad_interrupt>
+   a:	24 c0       	rjmp	.+72     	; 0x54 <__bad_interrupt>
+   c:	23 c0       	rjmp	.+70     	; 0x54 <__bad_interrupt>
+   e:	22 c0       	rjmp	.+68     	; 0x54 <__bad_interrupt>
+  10:	21 c0       	rjmp	.+66     	; 0x54 <__bad_interrupt>
+  12:	20 c0       	rjmp	.+64     	; 0x54 <__bad_interrupt>
+  14:	1f c0       	rjmp	.+62     	; 0x54 <__bad_interrupt>
+  16:	1e c0       	rjmp	.+60     	; 0x54 <__bad_interrupt>
+  18:	1d c0       	rjmp	.+58     	; 0x54 <__bad_interrupt>
+  1a:	1c c0       	rjmp	.+56     	; 0x54 <__bad_interrupt>
+  1c:	1b c0       	rjmp	.+54     	; 0x54 <__bad_interrupt>
+
+0000001e <__ctors_end>:
+  1e:	11 24       	eor	r1, r1
+  20:	1f be       	out	0x3f, r1	; 63
+  22:	cf e5       	ldi	r28, 0x5F	; 95
+  24:	d1 e0       	ldi	r29, 0x01	; 1
+  26:	de bf       	out	0x3e, r29	; 62
+  28:	cd bf       	out	0x3d, r28	; 61
+
+0000002a <__do_copy_data>:
+  2a:	10 e0       	ldi	r17, 0x00	; 0
+  2c:	a0 e6       	ldi	r26, 0x60	; 96
+  2e:	b0 e0       	ldi	r27, 0x00	; 0
+  30:	e8 ec       	ldi	r30, 0xC8	; 200
+  32:	f2 e0       	ldi	r31, 0x02	; 2
+  34:	02 c0       	rjmp	.+4      	; 0x3a <__do_copy_data+0x10>
+  36:	05 90       	lpm	r0, Z+
+  38:	0d 92       	st	X+, r0
+  3a:	a0 36       	cpi	r26, 0x60	; 96
+  3c:	b1 07       	cpc	r27, r17
+  3e:	d9 f7       	brne	.-10     	; 0x36 <__do_copy_data+0xc>
+
+00000040 <__do_clear_bss>:
+  40:	20 e0       	ldi	r18, 0x00	; 0
+  42:	a0 e6       	ldi	r26, 0x60	; 96
+  44:	b0 e0       	ldi	r27, 0x00	; 0
+  46:	01 c0       	rjmp	.+2      	; 0x4a <.do_clear_bss_start>
+
+00000048 <.do_clear_bss_loop>:
+  48:	1d 92       	st	X+, r1
+
+0000004a <.do_clear_bss_start>:
+  4a:	a0 36       	cpi	r26, 0x60	; 96
+  4c:	b2 07       	cpc	r27, r18
+  4e:	e1 f7       	brne	.-8      	; 0x48 <.do_clear_bss_loop>
+  50:	20 d0       	rcall	.+64     	; 0x92 <main>
+  52:	38 c1       	rjmp	.+624    	; 0x2c4 <_exit>
+
+00000054 <__bad_interrupt>:
+  54:	d5 cf       	rjmp	.-86     	; 0x0 <__vectors>
+
+00000056 <_Z18SPI_MasterTransmith>:
+	ADMUX = admux;
+	while(!(ADCSRA & (1<<ADIF)))
+	;
+	PORTB ^= (1<<5);
+	return ADCH;
+}
+  56:	8f b9       	out	0x0f, r24	; 15
+  58:	91 e1       	ldi	r25, 0x11	; 17
+  5a:	9d b9       	out	0x0d, r25	; 13
+  5c:	83 e1       	ldi	r24, 0x13	; 19
+  5e:	8d b9       	out	0x0d, r24	; 13
+  60:	9d b9       	out	0x0d, r25	; 13
+  62:	8d b9       	out	0x0d, r24	; 13
+  64:	9d b9       	out	0x0d, r25	; 13
+  66:	8d b9       	out	0x0d, r24	; 13
+  68:	9d b9       	out	0x0d, r25	; 13
+  6a:	8d b9       	out	0x0d, r24	; 13
+  6c:	9d b9       	out	0x0d, r25	; 13
+  6e:	8d b9       	out	0x0d, r24	; 13
+  70:	9d b9       	out	0x0d, r25	; 13
+  72:	8d b9       	out	0x0d, r24	; 13
+  74:	9d b9       	out	0x0d, r25	; 13
+  76:	8d b9       	out	0x0d, r24	; 13
+  78:	9d b9       	out	0x0d, r25	; 13
+  7a:	8d b9       	out	0x0d, r24	; 13
+  7c:	8f b1       	in	r24, 0x0f	; 15
+  7e:	08 95       	ret
+
+00000080 <_Z11init_T1_PWMv>:
+  80:	86 e0       	ldi	r24, 0x06	; 6
+  82:	87 bd       	out	0x27, r24	; 39
+  84:	08 95       	ret
+
+00000086 <_Z8ADC_Inithh>:
+  86:	66 b9       	out	0x06, r22	; 6
+  88:	87 b9       	out	0x07, r24	; 7
+  8a:	08 95       	ret
+
+0000008c <_Z9ADC_Startv>:
+void ADC_Start()
+{
+	ADCSRA = adcsra_c | (1<<ADSC);
+  8c:	82 ee       	ldi	r24, 0xE2	; 226
+  8e:	86 b9       	out	0x06, r24	; 6
+  90:	08 95       	ret
+
+00000092 <main>:
+volatile uint8_t NewPayload,buf1[32],buf2[32],buf1full;
+#include "NRF24L01.h"
+int main(void)
+{
+	uint8_t PRIM_RX = 1;
+	if(!init_NRF_TX(!PRIM_RX))
+  92:	80 e0       	ldi	r24, 0x00	; 0
+  94:	90 d0       	rcall	.+288    	; 0x1b6 <_Z11init_NRF_TXh>
+  96:	81 11       	cpse	r24, r1
+  98:	01 c0       	rjmp	.+2      	; 0x9c <main+0xa>
+	SPI_MasterTransmit(0);
+  9a:	dd df       	rcall	.-70     	; 0x56 <_Z18SPI_MasterTransmith>
+				else{
+					//printStringCRNL("Nothing to read, Waiting...");
+				}
+			}
+		
+    }
+  9c:	ff cf       	rjmp	.-2      	; 0x9c <main+0xa>
+
+0000009e <_Z15readSPIRegisterhh>:
+	return ((uint8_t)readSPIRegister(0x17,1) & 0x01);
+}
+
+uint8_t isTX_DS_Set(){
+	return ((uint8_t)readSPIRegister(0x07,1) & 0x20);
+}
+  9e:	af 92       	push	r10
+  a0:	bf 92       	push	r11
+  a2:	cf 92       	push	r12
+  a4:	df 92       	push	r13
+  a6:	ef 92       	push	r14
+  a8:	ff 92       	push	r15
+  aa:	0f 93       	push	r16
+  ac:	1f 93       	push	r17
+  ae:	cf 93       	push	r28
+  b0:	df 93       	push	r29
+  b2:	a6 2e       	mov	r10, r22
+  b4:	c0 98       	cbi	0x18, 0	; 24
+  b6:	cf df       	rcall	.-98     	; 0x56 <_Z18SPI_MasterTransmith>
+  b8:	aa 20       	and	r10, r10
+  ba:	11 f1       	breq	.+68     	; 0x100 <_Z15readSPIRegisterhh+0x62>
+  bc:	d0 e0       	ldi	r29, 0x00	; 0
+  be:	c0 e0       	ldi	r28, 0x00	; 0
+  c0:	b1 2c       	mov	r11, r1
+  c2:	c1 2c       	mov	r12, r1
+  c4:	d1 2c       	mov	r13, r1
+  c6:	e1 2c       	mov	r14, r1
+  c8:	f1 2c       	mov	r15, r1
+  ca:	00 e0       	ldi	r16, 0x00	; 0
+  cc:	10 e0       	ldi	r17, 0x00	; 0
+  ce:	80 e0       	ldi	r24, 0x00	; 0
+  d0:	c2 df       	rcall	.-124    	; 0x56 <_Z18SPI_MasterTransmith>
+  d2:	2c 2f       	mov	r18, r28
+  d4:	28 2b       	or	r18, r24
+  d6:	3b 2d       	mov	r19, r11
+  d8:	4c 2d       	mov	r20, r12
+  da:	5d 2d       	mov	r21, r13
+  dc:	6e 2d       	mov	r22, r14
+  de:	7f 2d       	mov	r23, r15
+  e0:	80 2f       	mov	r24, r16
+  e2:	91 2f       	mov	r25, r17
+  e4:	08 e0       	ldi	r16, 0x08	; 8
+  e6:	ab d0       	rcall	.+342    	; 0x23e <__ashldi3>
+  e8:	c2 2f       	mov	r28, r18
+  ea:	b3 2e       	mov	r11, r19
+  ec:	c4 2e       	mov	r12, r20
+  ee:	d5 2e       	mov	r13, r21
+  f0:	e6 2e       	mov	r14, r22
+  f2:	f7 2e       	mov	r15, r23
+  f4:	08 2f       	mov	r16, r24
+  f6:	19 2f       	mov	r17, r25
+  f8:	df 5f       	subi	r29, 0xFF	; 255
+  fa:	da 11       	cpse	r29, r10
+  fc:	e8 cf       	rjmp	.-48     	; 0xce <_Z15readSPIRegisterhh+0x30>
+  fe:	08 c0       	rjmp	.+16     	; 0x110 <_Z15readSPIRegisterhh+0x72>
+ 100:	c0 e0       	ldi	r28, 0x00	; 0
+ 102:	b1 2c       	mov	r11, r1
+ 104:	c1 2c       	mov	r12, r1
+ 106:	d1 2c       	mov	r13, r1
+ 108:	e1 2c       	mov	r14, r1
+ 10a:	f1 2c       	mov	r15, r1
+ 10c:	00 e0       	ldi	r16, 0x00	; 0
+ 10e:	10 e0       	ldi	r17, 0x00	; 0
+ 110:	c0 9a       	sbi	0x18, 0	; 24
+ 112:	2c 2f       	mov	r18, r28
+ 114:	3b 2d       	mov	r19, r11
+ 116:	4c 2d       	mov	r20, r12
+ 118:	5d 2d       	mov	r21, r13
+ 11a:	6e 2d       	mov	r22, r14
+ 11c:	7f 2d       	mov	r23, r15
+ 11e:	80 2f       	mov	r24, r16
+ 120:	91 2f       	mov	r25, r17
+ 122:	08 e0       	ldi	r16, 0x08	; 8
+ 124:	a7 d0       	rcall	.+334    	; 0x274 <__lshrdi3>
+ 126:	df 91       	pop	r29
+ 128:	cf 91       	pop	r28
+ 12a:	1f 91       	pop	r17
+ 12c:	0f 91       	pop	r16
+ 12e:	ff 90       	pop	r15
+ 130:	ef 90       	pop	r14
+ 132:	df 90       	pop	r13
+ 134:	cf 90       	pop	r12
+ 136:	bf 90       	pop	r11
+ 138:	af 90       	pop	r10
+ 13a:	08 95       	ret
+
+0000013c <_Z16writeSPIRegisterhyh>:
+	data >>= 8;
+	PORTB |= (1 << 0);
+	return	data;
+}
+
+uint8_t writeSPIRegister(uint8_t addr, uint64_t data, uint8_t length){
+ 13c:	9f 92       	push	r9
+ 13e:	af 92       	push	r10
+ 140:	bf 92       	push	r11
+ 142:	cf 92       	push	r12
+ 144:	df 92       	push	r13
+ 146:	ef 92       	push	r14
+ 148:	ff 92       	push	r15
+ 14a:	0f 93       	push	r16
+ 14c:	1f 93       	push	r17
+ 14e:	cf 93       	push	r28
+ 150:	df 93       	push	r29
+ 152:	c2 2f       	mov	r28, r18
+ 154:	d3 2f       	mov	r29, r19
+ 156:	f4 2e       	mov	r15, r20
+ 158:	d5 2e       	mov	r13, r21
+ 15a:	b6 2e       	mov	r11, r22
+ 15c:	a7 2e       	mov	r10, r23
+	uint8_t status;
+	PORTB &= ~(1 << 0);
+ 15e:	c0 98       	cbi	0x18, 0	; 24
+	addr |= 0x20;
+	status = SPI_MasterTransmit(addr);
+ 160:	80 62       	ori	r24, 0x20	; 32
+ 162:	79 df       	rcall	.-270    	; 0x56 <_Z18SPI_MasterTransmith>
+ 164:	98 2e       	mov	r9, r24
+	for(uint8_t i = 0; i < length; i++){
+ 166:	ee 20       	and	r14, r14
+ 168:	c1 f0       	breq	.+48     	; 0x19a <__stack+0x3b>
+ 16a:	c1 2c       	mov	r12, r1
+		SPI_MasterTransmit(data);
+ 16c:	80 2f       	mov	r24, r16
+ 16e:	73 df       	rcall	.-282    	; 0x56 <_Z18SPI_MasterTransmith>
+		data = data >> 8;
+ 170:	20 2f       	mov	r18, r16
+ 172:	31 2f       	mov	r19, r17
+ 174:	4c 2f       	mov	r20, r28
+ 176:	5d 2f       	mov	r21, r29
+ 178:	6f 2d       	mov	r22, r15
+ 17a:	7d 2d       	mov	r23, r13
+ 17c:	8b 2d       	mov	r24, r11
+ 17e:	9a 2d       	mov	r25, r10
+ 180:	08 e0       	ldi	r16, 0x08	; 8
+ 182:	78 d0       	rcall	.+240    	; 0x274 <__lshrdi3>
+ 184:	02 2f       	mov	r16, r18
+ 186:	13 2f       	mov	r17, r19
+ 188:	c4 2f       	mov	r28, r20
+ 18a:	d5 2f       	mov	r29, r21
+ 18c:	f6 2e       	mov	r15, r22
+ 18e:	d7 2e       	mov	r13, r23
+ 190:	b8 2e       	mov	r11, r24
+ 192:	a9 2e       	mov	r10, r25
+uint8_t writeSPIRegister(uint8_t addr, uint64_t data, uint8_t length){
+	uint8_t status;
+	PORTB &= ~(1 << 0);
+	addr |= 0x20;
+	status = SPI_MasterTransmit(addr);
+	for(uint8_t i = 0; i < length; i++){
+ 194:	c3 94       	inc	r12
+ 196:	ce 10       	cpse	r12, r14
+ 198:	e9 cf       	rjmp	.-46     	; 0x16c <__stack+0xd>
+		SPI_MasterTransmit(data);
+		data = data >> 8;
+	}
+	PORTB |= (1 << 0);
+ 19a:	c0 9a       	sbi	0x18, 0	; 24
+	return status;
+ 19c:	89 2d       	mov	r24, r9
+ 19e:	df 91       	pop	r29
+ 1a0:	cf 91       	pop	r28
+ 1a2:	1f 91       	pop	r17
+ 1a4:	0f 91       	pop	r16
+ 1a6:	ff 90       	pop	r15
+ 1a8:	ef 90       	pop	r14
+ 1aa:	df 90       	pop	r13
+ 1ac:	cf 90       	pop	r12
+ 1ae:	bf 90       	pop	r11
+ 1b0:	af 90       	pop	r10
+ 1b2:	9f 90       	pop	r9
+ 1b4:	08 95       	ret
+
+000001b6 <_Z11init_NRF_TXh>:
+#include "NRF24L01.h"
+
+//#define DEBUG_UART
+//#define STATS
+
+uint8_t init_NRF_TX(uint8_t data){
+ 1b6:	ef 92       	push	r14
+ 1b8:	0f 93       	push	r16
+ 1ba:	1f 93       	push	r17
+ 1bc:	cf 93       	push	r28
+ 1be:	c8 2f       	mov	r28, r24
+	writeSPIRegister(0x11,32,1);
+ 1c0:	ee 24       	eor	r14, r14
+ 1c2:	e3 94       	inc	r14
+ 1c4:	00 e2       	ldi	r16, 0x20	; 32
+ 1c6:	10 e0       	ldi	r17, 0x00	; 0
+ 1c8:	20 e0       	ldi	r18, 0x00	; 0
+ 1ca:	30 e0       	ldi	r19, 0x00	; 0
+ 1cc:	40 e0       	ldi	r20, 0x00	; 0
+ 1ce:	50 e0       	ldi	r21, 0x00	; 0
+ 1d0:	60 e0       	ldi	r22, 0x00	; 0
+ 1d2:	70 e0       	ldi	r23, 0x00	; 0
+ 1d4:	81 e1       	ldi	r24, 0x11	; 17
+ 1d6:	b2 df       	rcall	.-156    	; 0x13c <_Z16writeSPIRegisterhyh>
+	if(data){
+ 1d8:	cc 23       	and	r28, r28
+ 1da:	b1 f0       	breq	.+44     	; 0x208 <_Z11init_NRF_TXh+0x52>
+		ADC_Init(admux_c,adcsra_c);
+ 1dc:	62 ea       	ldi	r22, 0xA2	; 162
+ 1de:	80 e2       	ldi	r24, 0x20	; 32
+ 1e0:	52 df       	rcall	.-348    	; 0x86 <_Z8ADC_Inithh>
+		ADC_Start();
+ 1e2:	54 df       	rcall	.-344    	; 0x8c <_Z9ADC_Startv>
+		writeSPIRegister(0x00,0x0A,1); //Power ON and Transmit mode
+ 1e4:	0a e0       	ldi	r16, 0x0A	; 10
+ 1e6:	20 e0       	ldi	r18, 0x00	; 0
+ 1e8:	30 e0       	ldi	r19, 0x00	; 0
+ 1ea:	40 e0       	ldi	r20, 0x00	; 0
+ 1ec:	50 e0       	ldi	r21, 0x00	; 0
+ 1ee:	60 e0       	ldi	r22, 0x00	; 0
+ 1f0:	70 e0       	ldi	r23, 0x00	; 0
+ 1f2:	80 e0       	ldi	r24, 0x00	; 0
+ 1f4:	a3 df       	rcall	.-186    	; 0x13c <_Z16writeSPIRegisterhyh>
+		if(readSPIRegister(0x00,1) != 0x0A)
+ 1f6:	61 e0       	ldi	r22, 0x01	; 1
+ 1f8:	80 e0       	ldi	r24, 0x00	; 0
+ 1fa:	51 df       	rcall	.-350    	; 0x9e <_Z15readSPIRegisterhh>
+ 1fc:	e1 e0       	ldi	r30, 0x01	; 1
+ 1fe:	aa e0       	ldi	r26, 0x0A	; 10
+ 200:	55 d0       	rcall	.+170    	; 0x2ac <__cmpdi2_s8>
+ 202:	b9 f0       	breq	.+46     	; 0x232 <_Z11init_NRF_TXh+0x7c>
+ 204:	e0 e0       	ldi	r30, 0x00	; 0
+ 206:	15 c0       	rjmp	.+42     	; 0x232 <_Z11init_NRF_TXh+0x7c>
+			return 0x00;
+		else
+			return 0x01;
+	}
+	else{
+		init_T1_PWM();
+ 208:	3b df       	rcall	.-394    	; 0x80 <_Z11init_T1_PWMv>
+		writeSPIRegister(0x00,0x0B,1);//Power ON and Receive mode
+ 20a:	ee 24       	eor	r14, r14
+ 20c:	e3 94       	inc	r14
+ 20e:	0b e0       	ldi	r16, 0x0B	; 11
+ 210:	10 e0       	ldi	r17, 0x00	; 0
+ 212:	20 e0       	ldi	r18, 0x00	; 0
+ 214:	30 e0       	ldi	r19, 0x00	; 0
+ 216:	40 e0       	ldi	r20, 0x00	; 0
+ 218:	50 e0       	ldi	r21, 0x00	; 0
+ 21a:	60 e0       	ldi	r22, 0x00	; 0
+ 21c:	70 e0       	ldi	r23, 0x00	; 0
+ 21e:	80 e0       	ldi	r24, 0x00	; 0
+ 220:	8d df       	rcall	.-230    	; 0x13c <_Z16writeSPIRegisterhyh>
+		if(readSPIRegister(0x00,1) != 0x0B)
+ 222:	61 e0       	ldi	r22, 0x01	; 1
+ 224:	80 e0       	ldi	r24, 0x00	; 0
+ 226:	3b df       	rcall	.-394    	; 0x9e <_Z15readSPIRegisterhh>
+ 228:	e1 e0       	ldi	r30, 0x01	; 1
+ 22a:	ab e0       	ldi	r26, 0x0B	; 11
+ 22c:	3f d0       	rcall	.+126    	; 0x2ac <__cmpdi2_s8>
+ 22e:	09 f0       	breq	.+2      	; 0x232 <_Z11init_NRF_TXh+0x7c>
+ 230:	e0 e0       	ldi	r30, 0x00	; 0
+		return 0x00;
+		else
+		return 0x01;
+	}
+}
+ 232:	8e 2f       	mov	r24, r30
+ 234:	cf 91       	pop	r28
+ 236:	1f 91       	pop	r17
+ 238:	0f 91       	pop	r16
+ 23a:	ef 90       	pop	r14
+ 23c:	08 95       	ret
+
+0000023e <__ashldi3>:
+ 23e:	0f 93       	push	r16
+ 240:	08 30       	cpi	r16, 0x08	; 8
+ 242:	90 f0       	brcs	.+36     	; 0x268 <__ashldi3+0x2a>
+ 244:	98 2f       	mov	r25, r24
+ 246:	87 2f       	mov	r24, r23
+ 248:	76 2f       	mov	r23, r22
+ 24a:	65 2f       	mov	r22, r21
+ 24c:	54 2f       	mov	r21, r20
+ 24e:	43 2f       	mov	r20, r19
+ 250:	32 2f       	mov	r19, r18
+ 252:	22 27       	eor	r18, r18
+ 254:	08 50       	subi	r16, 0x08	; 8
+ 256:	f4 cf       	rjmp	.-24     	; 0x240 <__ashldi3+0x2>
+ 258:	22 0f       	add	r18, r18
+ 25a:	33 1f       	adc	r19, r19
+ 25c:	44 1f       	adc	r20, r20
+ 25e:	55 1f       	adc	r21, r21
+ 260:	66 1f       	adc	r22, r22
+ 262:	77 1f       	adc	r23, r23
+ 264:	88 1f       	adc	r24, r24
+ 266:	99 1f       	adc	r25, r25
+ 268:	0a 95       	dec	r16
+ 26a:	b2 f7       	brpl	.-20     	; 0x258 <__ashldi3+0x1a>
+ 26c:	0f 91       	pop	r16
+ 26e:	08 95       	ret
+
+00000270 <__ashrdi3>:
+ 270:	97 fb       	bst	r25, 7
+ 272:	10 f8       	bld	r1, 0
+
+00000274 <__lshrdi3>:
+ 274:	16 94       	lsr	r1
+ 276:	00 08       	sbc	r0, r0
+ 278:	0f 93       	push	r16
+ 27a:	08 30       	cpi	r16, 0x08	; 8
+ 27c:	98 f0       	brcs	.+38     	; 0x2a4 <__lshrdi3+0x30>
+ 27e:	08 50       	subi	r16, 0x08	; 8
+ 280:	23 2f       	mov	r18, r19
+ 282:	34 2f       	mov	r19, r20
+ 284:	45 2f       	mov	r20, r21
+ 286:	56 2f       	mov	r21, r22
+ 288:	67 2f       	mov	r22, r23
+ 28a:	78 2f       	mov	r23, r24
+ 28c:	89 2f       	mov	r24, r25
+ 28e:	90 2d       	mov	r25, r0
+ 290:	f4 cf       	rjmp	.-24     	; 0x27a <__lshrdi3+0x6>
+ 292:	05 94       	asr	r0
+ 294:	97 95       	ror	r25
+ 296:	87 95       	ror	r24
+ 298:	77 95       	ror	r23
+ 29a:	67 95       	ror	r22
+ 29c:	57 95       	ror	r21
+ 29e:	47 95       	ror	r20
+ 2a0:	37 95       	ror	r19
+ 2a2:	27 95       	ror	r18
+ 2a4:	0a 95       	dec	r16
+ 2a6:	aa f7       	brpl	.-22     	; 0x292 <__lshrdi3+0x1e>
+ 2a8:	0f 91       	pop	r16
+ 2aa:	08 95       	ret
+
+000002ac <__cmpdi2_s8>:
+ 2ac:	00 24       	eor	r0, r0
+ 2ae:	a7 fd       	sbrc	r26, 7
+ 2b0:	00 94       	com	r0
+ 2b2:	2a 17       	cp	r18, r26
+ 2b4:	30 05       	cpc	r19, r0
+ 2b6:	40 05       	cpc	r20, r0
+ 2b8:	50 05       	cpc	r21, r0
+ 2ba:	60 05       	cpc	r22, r0
+ 2bc:	70 05       	cpc	r23, r0
+ 2be:	80 05       	cpc	r24, r0
+ 2c0:	90 05       	cpc	r25, r0
+ 2c2:	08 95       	ret
+
+000002c4 <_exit>:
+ 2c4:	f8 94       	cli
+
+000002c6 <__stop_program>:
+ 2c6:	ff cf       	rjmp	.-2      	; 0x2c6 <__stop_program>
